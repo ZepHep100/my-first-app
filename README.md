@@ -1,16 +1,32 @@
-# React + Vite
+# 🛍️ Магазин одежды (React)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Учебный проект интернет-магазина, разработанный на React. 
 
-Currently, two official plugins are available:
+## 🚀 Функционал
+- **Добавление товаров** (с валидацией названия и цены).
+- **Категории:** фильтрация одежды, обуви и аксессуаров.
+- **Поиск** по названию в реальном времени.
+- **Корзина:** добавление товаров, подсчёт итоговой суммы, удаление.
+- **Редактирование** товаров прямо в карточке.
+- **Сохранение данных** (корзина и товары не пропадают при перезагрузке благодаря `localStorage`).
+- **Многостраничность** (React Router): Главная, О магазине, Контакты.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## 🛠️ Технологии
+- **React** (Hooks: `useState`, `useEffect`)
+- **React Router DOM** (навигация)
+- **CSS3** (Flexbox, CSS Grid, адаптивная вёрстка)
+- **Vite** (сборка проекта)
+- **LocalStorage API**
 
-## React Compiler
+## 📦 Как запустить локально
+1. Клонируйте репозиторий:
+   `git clone https://github.com/ZepHep100/my-first-app.git`
+2. Перейдите в папку проекта:
+   `cd my-first-app`
+3. Установите зависимости:
+   `npm install`
+4. Запустите проект:
+   `npm run dev`
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## 👤 Автор
+**Андрей** (GitHub: [ZepHep100](https://github.com/ZepHep100))
