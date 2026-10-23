@@ -1,0 +1,20 @@
+.page-container {
+    background: white;
+    max-width: 600px;
+    margin: 40px auto;
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    text-align: center;
+}
+
+.page-container h1 {
+    color: #1a1a1a;
+    margin-bottom: 20px;
+}
+
+.page-container p {
+    color: #555;
+    font-size: 16px;
+    line-height: 1.6;
+}
