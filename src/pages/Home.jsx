@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import "./Home.css";
 function Home(){
+  const isAdmin = localStorage.getItem("isAdmin") === "true";
    const [products, setProducts] = useState(() => {
     const saved = localStorage.getItem("products");
     return saved ? JSON.parse(saved) : [
@@ -136,6 +137,7 @@ useEffect(() => {
 
     </div>
 
+     {isAdmin && (
       <div className="shop-form">
         <input
         type="text"
@@ -143,7 +145,8 @@ useEffect(() => {
         value={inputValue}
         onChange={(e) => setInputValue(e.target.value)}
         />
-        
+      
+
         <input
         type="number"
         placeholder="Цена"
@@ -163,7 +166,7 @@ useEffect(() => {
 
         <button className="addProduct" onClick={handleAddProduct}>Добавить</button>
         </div>
-        
+     )}  
         <div className="shop-controls">
         <input 
         placeholder="Поиск товара..."
@@ -193,10 +196,16 @@ useEffect(() => {
                 <div className="product-view">
                   <h3 className="product-name">{product.name}</h3>
                   <p className="product-price">{product.price} ₽</p>
+                  
                   <div className="product-actions">
+                    <button className="btn btn-buy" onClick={() => buyProducts(product.id)}>Купить</button>
+
+                  {isAdmin && (
+                    <>
                   <button className="btn btn-delete" onClick={() => deleteProduct(product.id)}>Удалить</button>
-                  <button className="btn btn-buy" onClick={() => buyProducts(product.id)}>Купить</button>
                   <button className="btn btn-buy" onClick={() => startEdit(product)}>Редактировать</button>
+                    </>
+                )}
                 </div> 
                 </div>
             )}
@@ -218,7 +227,8 @@ useEffect(() => {
                 <button className="btn btn-delete" onClick={() => removeFromcart(index)}>
                   Удалить
                   </button>
-              </div>
+                  
+                  </div>
             ))}
             <div className="cart-total">
               Итого: <strong>{cartTotal} ₽</strong>

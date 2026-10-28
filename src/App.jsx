@@ -237,6 +237,7 @@ import { Routes, Route, Link } from "react-router-dom";
 import Home from "./pages/Home";
 import About from "./pages/About";
 import Contacts from "./pages/Contacts";
+import Login from "./pages/Login";
 import "./App.css";
 
 function App() {
@@ -245,7 +246,15 @@ function App() {
       <nav className="nav">
         <Link to="/">Магазин</Link>{" | "}
         <Link to="/about">О магазине</Link>{" | "}
-        <Link to="/contacts">Контакты</Link>
+        <Link to="/contacts">Контакты</Link>{" | "}
+        <Link to="/login">Вход</Link>
+
+        {localStorage.getItem("isAdmin") === "true" && (
+             <button className="Logout" onClick={() => {localStorage.removeItem("isAdmin"); window.location.reload();}}
+             >
+              Выйти
+                  </button>
+        )}
       </nav>
 
       <hr />
@@ -254,6 +263,7 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/about" element={<About />} />
         <Route path="/contacts" element={<Contacts />} />
+        <Route path="/login" element={<Login />}/>
       </Routes>
     </div>
   );
