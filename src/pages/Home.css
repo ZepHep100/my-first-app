@@ -252,7 +252,23 @@
     color: #4a90e2;
 }
 
+.btn-checkout {
+    width: 100%;
+    padding: 12px;
+    margin-top: 16px;
+    background: #27ae60;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+}
 
+.btn-checkout:hover {
+    background: #219150;
+}
 
 @media (max-width: 768px) {
     .shop-stats {

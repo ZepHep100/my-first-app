@@ -69,17 +69,33 @@ useEffect(() => {
   //Покупка продукта
   const buyProducts = (productID) => {
     const targetProduct = products.find(product => product.id === productID);
-    if(targetProduct){
-      setCart([...cart, targetProduct]);
+    if(!targetProduct) return 
+    
+    const existingIte = cart.find(item => item.id === productID)
+
+    if(existingIte){
+      setCart(cart.map(item => 
+        item.id === productID
+        ?{...item, quantity: (item.quantity || 1) + 1}
+      :item
+      ));
+    } else {
+      setCart([...cart, {...targetProduct, quantity: 1}]);
     }
-  }
+  };
    
   //Корзина
   function removeFromcart(index){
     setCart(cart.filter((_, i) => i !== index));
   }
 
-  const cartTotal = cart.reduce((acc, item) => acc + item.price, 0);
+  const checkout = () => {
+    if (cart.length === 0) return;
+    alert(`Заказ на сумму ${cartTotal} ₽ успешно оформлен! Спасибо за покупку!`);
+    setCart([]);
+  };
+
+  const cartTotal = cart.reduce((acc, item) => acc + (item.price * (item.quantity || 1)), 0);
 
   //Добавить продукт
   const handleAddProduct = () => {
@@ -222,17 +238,21 @@ useEffect(() => {
          <div className="cart-list">
             {cart.map((item, index) => (
               <div className="cart-item" key={index}>
-               <span className="cart-item-name">{item.name}</span>
-                <span className="cart-item-price">{item.price} ₽</span>
+               <span className="cart-item-name">
+                {item.name} <strong>x {item.quantity || 1}</strong>
+                </span>
+
+                <span className="cart-item-price">{item.price * (item.quantity || 1)} ₽</span>
                 <button className="btn btn-delete" onClick={() => removeFromcart(index)}>
                   Удалить
                   </button>
-                  
                   </div>
             ))}
             <div className="cart-total">
               Итого: <strong>{cartTotal} ₽</strong>
             </div>
+
+            <button className="btn-checkout" onClick={checkout}>Оформить заказ</button>
             </div>
       )}
       </div>
