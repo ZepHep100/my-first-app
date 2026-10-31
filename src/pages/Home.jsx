@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
 import "./Home.css";
+import ProductCard from "../components/ProductCard";
+import { useCart } from "../context/CartContext";
 function Home(){
   const isAdmin = localStorage.getItem("isAdmin") === "true";
    const [products, setProducts] = useState(() => {
@@ -19,19 +21,11 @@ function Home(){
   const [editPrice, setEditPrice] = useState("");
   const [categoryInput, setCategoryInput] = useState("одежда");
   const [selectedCategory, setSelectedCategory] = useState("все");
-  const [cart, setCart] = useState(() => {
-    const saved = localStorage.getItem("cart");
-    return saved ? JSON.parse(saved) : [];
-  });
+  const { cart, addToCart, removeFromCart, clearCart} = useCart();
 
   useEffect(() => {
   localStorage.setItem("products", JSON.stringify(products));
 }, [products]);
-
-useEffect(() => {
-  localStorage.setItem("cart", JSON.stringify(cart));
-}, [cart]);
-
 
   const total = products.reduce((acc, n) => acc + n.price, 0);
 
@@ -65,35 +59,7 @@ useEffect(() => {
   function cancelEdit(){
     setEditingId(null);
   }
-
-  //Покупка продукта
-  const buyProducts = (productID) => {
-    const targetProduct = products.find(product => product.id === productID);
-    if(!targetProduct) return 
-    
-    const existingIte = cart.find(item => item.id === productID)
-
-    if(existingIte){
-      setCart(cart.map(item => 
-        item.id === productID
-        ?{...item, quantity: (item.quantity || 1) + 1}
-      :item
-      ));
-    } else {
-      setCart([...cart, {...targetProduct, quantity: 1}]);
-    }
-  };
-   
-  //Корзина
-  function removeFromcart(index){
-    setCart(cart.filter((_, i) => i !== index));
-  }
-
-  const checkout = () => {
-    if (cart.length === 0) return;
-    alert(`Заказ на сумму ${cartTotal} ₽ успешно оформлен! Спасибо за покупку!`);
-    setCart([]);
-  };
+ 
 
   const cartTotal = cart.reduce((acc, item) => acc + (item.price * (item.quantity || 1)), 0);
 
@@ -124,6 +90,11 @@ useEffect(() => {
     setCategoryInput("одежда");
   }
 
+  const checkout = () =>  {
+    if(cart.length === 0) return;
+    alert(`Заказ на сумму ${cartTotal} ₽ успешно оформлен!`);
+    clearCart();
+  }
 
     return( 
          <div>
@@ -198,35 +169,29 @@ useEffect(() => {
         </div>
 
       <div className="shop-list">
-      
-        {filteredProducts.map(product  => (
-          <div className="product-card" key={product.id}>
-            {editingId === product.id ? (
-              <div className="edit-mode">
-                <input value={editName} onChange={(e) => setEditName(e.target.value)}/>
-                <input value={editPrice} onChange={(e) => setEditPrice(e.target.value)} />
-                <button className="btn btn-save" onClick={() => saveEdit(product.id)}>Сохранить</button>
-                <button className="btn btn-cancel" onClick={cancelEdit}>Отмена</button>
-              </div>
-              ) : (
-                <div className="product-view">
-                  <h3 className="product-name">{product.name}</h3>
-                  <p className="product-price">{product.price} ₽</p>
-                  
-                  <div className="product-actions">
-                    <button className="btn btn-buy" onClick={() => buyProducts(product.id)}>Купить</button>
-
-                  {isAdmin && (
-                    <>
-                  <button className="btn btn-delete" onClick={() => deleteProduct(product.id)}>Удалить</button>
-                  <button className="btn btn-buy" onClick={() => startEdit(product)}>Редактировать</button>
-                    </>
-                )}
-                </div> 
-                </div>
-            )}
-            </div>          
-        ))}
+        {filteredProducts.map(product => (
+  product.id === editingId ? (
+    // Если товар редактируется — показываем форму
+    <div className="product-card" key={product.id}>
+      <div className="edit-mode">
+        <input value={editName} onChange={(e) => setEditName(e.target.value)}/>
+        <input value={editPrice} onChange={(e) => setEditPrice(e.target.value)} />
+        <button className="btn btn-save" onClick={() => saveEdit(product.id)}>Сохранить</button>
+        <button className="btn btn-cancel" onClick={cancelEdit}>Отмена</button>
+      </div>
+    </div>
+  ) : (
+    // Если не редактируется — показываем компонент ProductCard
+    <ProductCard 
+      key={product.id} 
+      product={product} 
+      isAdmin={isAdmin}
+      onBuy={addToCart}
+      onDelete={deleteProduct}
+      onEdit={startEdit}
+    />
+  )
+))}
       </div>
 
     <div className="cart-section">
@@ -243,7 +208,7 @@ useEffect(() => {
                 </span>
 
                 <span className="cart-item-price">{item.price * (item.quantity || 1)} ₽</span>
-                <button className="btn btn-delete" onClick={() => removeFromcart(index)}>
+                <button className="btn btn-delete" onClick={() => removeFromCart(index)}>
                   Удалить
                   </button>
                   </div>
