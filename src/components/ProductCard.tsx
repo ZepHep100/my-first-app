@@ -1,4 +1,14 @@
-function ProductCard({ product, isAdmin, onBuy, onDelete, onEdit }) {
+import { Product } from "../types";
+
+interface ProductCardProps {
+  product: Product;
+  isAdmin: boolean;
+  onBuy: (product: Product) => void;
+  onDelete: (id: number) => void;
+  onEdit: (product: Product) => void;
+}
+
+function ProductCard({ product, isAdmin, onBuy, onDelete, onEdit }: ProductCardProps) {
   return (
     <div className="product-card">
       <div className="product-view">

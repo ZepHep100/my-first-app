@@ -241,6 +241,14 @@ import Login from "./pages/Login";
 import "./App.css";
 
 function App() {
+  // Проверка на админа (если null, то false)
+  const isAdmin = localStorage.getItem("isAdmin") === "true";
+
+  const handleLogout = () => {
+    localStorage.removeItem("isAdmin");
+    window.location.reload();
+  };
+
   return (
     <div>
       <nav className="nav">
@@ -249,11 +257,10 @@ function App() {
         <Link to="/contacts">Контакты</Link>{" | "}
         <Link to="/login">Вход</Link>
 
-        {localStorage.getItem("isAdmin") === "true" && (
-             <button className="Logout" onClick={() => {localStorage.removeItem("isAdmin"); window.location.reload();}}
-             >
-              Выйти
-                  </button>
+        {isAdmin && (
+          <button className="Logout" onClick={handleLogout}>
+            Выйти
+          </button>
         )}
       </nav>
 
@@ -263,7 +270,7 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/about" element={<About />} />
         <Route path="/contacts" element={<Contacts />} />
-        <Route path="/login" element={<Login />}/>
+        <Route path="/login" element={<Login />} />
       </Routes>
     </div>
   );
